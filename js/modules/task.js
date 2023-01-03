@@ -1,57 +1,48 @@
 import getTaskElement from "./getTaskElement.js";
-const select = document.querySelector("#countries-dropdown");
 
-const editGlobal = {
-  edit: false,
-};
 export default class Task {
   constructor(taskContent) {
     this.content = taskContent;
-    // this.editMode = false;
+    this.task = undefined;
+  }
+
+  _add(task) {
+    return getTaskElement(task);
+  }
+
+  _changeActive(task) {
+    // отключает режим редактирования для всех задач, переключает режим для текущей задачи
+    const isActive = task.classList.contains("task--active");
+    document.querySelectorAll(".task--active").forEach(function (item) {
+      item.querySelector(".task__view").textContent =
+        item.querySelector(".task__input").value;
+      item.classList.remove("task--active");
+    });
+    task.classList.toggle("task--active", !isActive);
+  }
+
+  _editTask(editBtn) {
+    this.task = editBtn.parentNode;
+    this._changeActive(this.task); //отключаем редактирование для всех остальных элементов
+    const taskForm = this.task.parentNode; //для использования методов формы определяем родит.элемент form
+    taskForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      this.task.querySelector(".task__view").textContent =
+        this.task.querySelector(".task__input").value;
+      this.task.classList.remove("task--active");
+    });
+  }
+
+  _dragDrop(newTask) {
+    newTask.draggable = true;
   }
 
   init() {
-    console.log(this.content.toUpperCase());
-    this._add(this.content);
-    console.log(this);
-
-    const editBtns = document.querySelectorAll(".task__edit");
-
-    editBtns.forEach((editBtn) =>
-      editBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        console.log(event);
-        console.log(`Edit mode is ${editGlobal.edit}`);
-        const parent = editBtn.parentNode;
-        if (editGlobal.edit) {
-          editGlobal.edit = false; // выключить режим редактирования
-          parent.classList.remove("task--active");
-        } else {
-          editGlobal.edit = true; // включить режим редактирования
-          parent.classList.add("task--active");
-          
-          const taskInput = parent.querySelector(".task__input");
-          const taskView = parent.querySelector(".task__view");
-          const taskForm = parent.parentNode;
-          
-          taskForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            console.log("Input was changed");
-            taskView.textContent = taskInput.value;
-            parent.classList.remove("task--active");
-            editGlobal.edit = false;
-            console.log("active was removed");
-          });
-        }
-      })
-    );
-  }
-
-  _add(tsk) {
-    getTaskElement(tsk);
-  }
-
-  _changeActive(parent) {
-    parent.classList.remove("task--active");
+    const newTask = this._add(this.content); // добавляет элемент с задачей в html
+    const editBtn = newTask.querySelector(".task__edit"); // определение кнопки редактирования задачи
+    editBtn.addEventListener("click", () => {
+      this._editTask(editBtn); // редактирование задачи
+    });
+    this._dragDrop(newTask);
   }
 }
