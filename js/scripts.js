@@ -20,7 +20,6 @@ inputForm.addEventListener("click", () => {
 });
 
 //------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 const tasksListElements = document.querySelectorAll(`.taskboard__list`);
 console.log(tasksListElements);
@@ -38,9 +37,6 @@ document.addEventListener(`dragstart`, (evt) => {
     console.log("Потащили...");
     draggedTask.classList.add(`task--dragged`);
     draggedTask.classList.add(`selected`);
-
-    // dragging.classList.add('dragging');
-    // cloned = dragging.cloneNode(true);
   }
 });
 
@@ -56,10 +52,7 @@ tasksListElements.forEach((tasksListElement) =>
       evt.preventDefault();
 
       // Находим перемещаемый элемент
-      // const tasksListElement = document.querySelector(".taskboard__list");
-      // console.log(tasksListElement);
       const activeElement = document.querySelector(`.task--dragged`);
-
       // Находим элемент, над которым в данный момент находится курсор
       const currentElement = evt.target;
       // Проверяем, что событие сработало:
@@ -68,7 +61,6 @@ tasksListElements.forEach((tasksListElement) =>
       const isMoveable =
         activeElement !== currentElement &&
         currentElement.classList.contains(`task`);
-
       // Если нет, прерываем выполнение функции
       if (!isMoveable) {
         return;
@@ -80,8 +72,33 @@ tasksListElements.forEach((tasksListElement) =>
           ? currentElement.nextElementSibling
           : currentElement;
 
+      //определяем класс для задачи перед drop
+      const articleClass = tasksListElement.parentNode.classList[1];
+      console.log(classByColumn(articleClass, activeElement));
+
       // Вставляем activeElement перед nextElement
       tasksListElement.insertBefore(activeElement, nextElement);
     }
   })
 );
+
+function classByColumn(articleClass, activeElement) {
+  // Выбор класса для задачи в соответствии с типом колонки
+  let statusClassTask;
+  switch (articleClass) {
+    case "taskboard__group--backlog":
+      statusClassTask = "task--backlog";
+      break;
+    case "taskboard__group--processing":
+      statusClassTask = "task--processing";
+      break;
+    case "taskboard__group--done":
+      statusClassTask = "task--done";
+      break;
+    case "taskboard__group--basket":
+      statusClassTask = "task--basket";
+      break;
+  }
+  // замена старого класса новым
+  return activeElement.classList.replace(activeElement.classList[2], statusClassTask);;
+}
