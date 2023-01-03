@@ -22,27 +22,24 @@ inputForm.addEventListener("click", () => {
 //------------------------------------------------------------------------
 
 const tasksListElements = document.querySelectorAll(`.taskboard__list`);
-console.log(tasksListElements);
 const taskElements = document.querySelectorAll(".taskboard__item");
 taskElements.forEach((evt) => {
   if (!evt.classList.contains("task--empty")) {
     evt.draggable = true;
-    console.log(`dragable`);
   }
 });
 
 document.addEventListener(`dragstart`, (evt) => {
   if (evt.target.classList.contains("task")) {
     const draggedTask = evt.target;
-    console.log("Потащили...");
     draggedTask.classList.add(`task--dragged`);
-    draggedTask.classList.add(`selected`);
   }
 });
 
 document.addEventListener(`dragend`, (evt) => {
+  const activeElement = document.querySelector(`.task--dragged`);
   evt.target.classList.remove(`task--dragged`);
-  evt.target.classList.remove(`selected`);
+  classByColumn(activeElement);
 });
 
 tasksListElements.forEach((tasksListElement) =>
@@ -72,19 +69,17 @@ tasksListElements.forEach((tasksListElement) =>
           ? currentElement.nextElementSibling
           : currentElement;
 
-      //определяем класс для задачи перед drop
-      const articleClass = tasksListElement.parentNode.classList[1];
-      console.log(classByColumn(articleClass, activeElement));
-
       // Вставляем activeElement перед nextElement
       tasksListElement.insertBefore(activeElement, nextElement);
     }
   })
 );
 
-function classByColumn(articleClass, activeElement) {
+function classByColumn(activeElement) {
+  const articleClass = activeElement.parentNode.parentNode.classList[1];
   // Выбор класса для задачи в соответствии с типом колонки
   let statusClassTask;
+
   switch (articleClass) {
     case "taskboard__group--backlog":
       statusClassTask = "task--backlog";
@@ -100,5 +95,8 @@ function classByColumn(articleClass, activeElement) {
       break;
   }
   // замена старого класса новым
-  return activeElement.classList.replace(activeElement.classList[2], statusClassTask);
+  return activeElement.classList.replace(
+    activeElement.classList[2],
+    statusClassTask
+  );
 }
