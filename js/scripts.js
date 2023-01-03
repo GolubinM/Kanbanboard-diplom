@@ -81,3 +81,24 @@ tasksListElements.forEach((tasksListElement) =>
     }
   })
 );
+
+function classByColumn(articleClass, activeElement) {
+  // Выбор класса для задачи в соответствии с типом колонки
+  let statusClassTask;
+  switch (articleClass) {
+    case "taskboard__group--backlog":
+      statusClassTask = "task--backlog";
+      break;
+    case "taskboard__group--processing":
+      statusClassTask = "task--processing";
+      break;
+    case "taskboard__group--done":
+      statusClassTask = "task--done";
+      break;
+    case "taskboard__group--basket":
+      statusClassTask = "task--basket";
+      break;
+  }
+  // замена старого класса новым
+  return activeElement.classList.replace(activeElement.classList[2], statusClassTask);
+}
