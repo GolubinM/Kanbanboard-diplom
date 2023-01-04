@@ -16,8 +16,7 @@ export default class Task {
     // обновляет содержание задачи из поля input для редактируемых задач
     const isActive = task.classList.contains("task--active");
     document.querySelectorAll(".task--active").forEach(function (item) {
-      item.querySelector(".task__view").textContent =
-        item.querySelector(".task__input").value;
+      item.querySelector(".task__view").textContent = item.querySelector(".task__input").value;
       item.classList.remove("task--active");
     });
     task.classList.toggle("task--active", !isActive);
@@ -32,17 +31,13 @@ export default class Task {
     inputTask.selectionStart = inputTask.value.length;
   }
 
-  _dragDrop(newTask) {
-    newTask.draggable = true;
-  }
-
   init() {
     this.task = this._add(this.content); // добавляет элемент с задачей в html
+    this.task.draggable = true; // делаем задачу перемещаемой
     const editBtn = this.task.querySelector(".task__edit"); // определение кнопки редактирования задачи
     editBtn.addEventListener("click", () => {
       this._editTask(editBtn); // редактирование задачи
     });
-    this._dragDrop(this.task);
     // завершение редактирования содержания задачи по Enter или Esc
     this.inputTask = this.task.querySelector(".task__input");
     this.inputTask.addEventListener("keyup", (event) => {
