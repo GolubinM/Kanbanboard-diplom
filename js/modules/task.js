@@ -4,6 +4,7 @@ export default class Task {
   constructor(taskContent) {
     this.content = taskContent;
     this.task = undefined;
+    this.inputTask = undefined;
   }
 
   _add(task) {
@@ -12,6 +13,7 @@ export default class Task {
 
   _changeActive(task) {
     // отключает режим редактирования для всех задач, переключает режим для текущей задачи
+    // обновляет содержание задачи из поля input для редактируемых задач
     const isActive = task.classList.contains("task--active");
     document.querySelectorAll(".task--active").forEach(function (item) {
       item.querySelector(".task__view").textContent =
@@ -24,16 +26,10 @@ export default class Task {
   _editTask(editBtn) {
     this.task = editBtn.parentNode;
     this._changeActive(this.task); //отключаем редактирование для всех остальных элементов
-    const taskForm = document.querySelector(".taskboard__form"); //для использования методов формы определяем родит.элемент form
-    console.log(taskForm);
-    console.log(`btn edit`);
-    taskForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      console.log(`Form submit!!!`);
-      this.task.querySelector(".task__view").textContent =
-        this.task.querySelector(".task__input").value;
-      this.task.classList.remove("task--active");
-    });
+    //переход к концу строки редактирования задачи
+    const inputTask = this.task.querySelector(".task__input");
+    inputTask.focus();
+    inputTask.selectionStart = inputTask.value.length;
   }
 
   _dragDrop(newTask) {
@@ -41,11 +37,18 @@ export default class Task {
   }
 
   init() {
-    const newTask = this._add(this.content); // добавляет элемент с задачей в html
-    const editBtn = newTask.querySelector(".task__edit"); // определение кнопки редактирования задачи
+    this.task = this._add(this.content); // добавляет элемент с задачей в html
+    const editBtn = this.task.querySelector(".task__edit"); // определение кнопки редактирования задачи
     editBtn.addEventListener("click", () => {
       this._editTask(editBtn); // редактирование задачи
     });
-    this._dragDrop(newTask);
+    this._dragDrop(this.task);
+    // завершение редактирования содержания задачи по Enter или Esc
+    this.inputTask = this.task.querySelector(".task__input");
+    this.inputTask.addEventListener("keyup", (event) => {
+      if (event.keyCode === 13 || event.keyCode === 27) {
+        this._changeActive(this.task);
+      }
+    });
   }
 }
