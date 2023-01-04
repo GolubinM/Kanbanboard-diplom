@@ -24,9 +24,12 @@ export default class Task {
   _editTask(editBtn) {
     this.task = editBtn.parentNode;
     this._changeActive(this.task); //отключаем редактирование для всех остальных элементов
-    const taskForm = this.task.parentNode; //для использования методов формы определяем родит.элемент form
+    const taskForm = document.querySelector(".taskboard__form"); //для использования методов формы определяем родит.элемент form
+    console.log(taskForm);
+    console.log(`btn edit`);
     taskForm.addEventListener("submit", (event) => {
       event.preventDefault();
+      console.log(`Form submit!!!`);
       this.task.querySelector(".task__view").textContent =
         this.task.querySelector(".task__input").value;
       this.task.classList.remove("task--active");
