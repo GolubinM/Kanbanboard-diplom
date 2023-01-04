@@ -79,7 +79,6 @@ tasksListElements.forEach((tasksListElement) =>
         currentElement === activeElement.nextElementSibling
           ? currentElement.nextElementSibling
           : currentElement;
-
       // Вставляем activeElement перед nextElement
       tasksListElement.insertBefore(activeElement, nextElement);
     }
@@ -109,8 +108,6 @@ function hasTask() {
 // Проверка корзину на пустоту
 function isBasketEmpty() {
   const isEmpty = !Boolean(document.querySelector(".taskboard__list--trash").children.length - 1);
-  // const emptyTaskList = document.querySelector(".task--empty-trash").classList;
-  // isEmpty ? emptyTaskList.add("hidden") : emptyTaskList.remove("hidden");
   btnClearBasket.disabled = isEmpty;
   return isEmpty;
 }
