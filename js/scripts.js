@@ -8,6 +8,7 @@ inputForm.addEventListener("submit", (event) => {
   const taskContent = new Task(formData.get("task-name"));
   taskContent.init();
   inputForm.reset();
+  hasTask();
 });
 
 //Обработка перехода на поле Input из редактируемых элементов task
@@ -72,6 +73,7 @@ tasksListElements.forEach((tasksListElement) =>
       // Вставляем activeElement перед nextElement
       tasksListElement.insertBefore(activeElement, nextElement);
     }
+    hasTask();
   })
 );
 
@@ -99,4 +101,18 @@ function classByColumn(activeElement) {
     activeElement.classList[2],
     statusClassTask
   );
+}
+
+//------------------------------------------------------------------------
+
+
+// function hasTask() - скрытие пустого элемента если в taskboard__group присутствуют более 1 элемента '.taskboard__item'.
+function hasTask() {
+  const taskboardListCollection = document.querySelectorAll(".taskboard__list"); // создаем коллекцию колонок задач
+  taskboardListCollection.forEach((taskboard) => {
+    let countTask = taskboard.querySelectorAll(".task").length; //определяем количество элементов в колонке
+    // скрытие или отображение пустого элемента при опустошении колонок
+    const classesEmptyTasks = taskboard.querySelector(".task--empty").classList;
+    (countTask > 1) ? classesEmptyTasks.add("hidden-block") : classesEmptyTasks.remove("hidden-block");
+  });
 }
