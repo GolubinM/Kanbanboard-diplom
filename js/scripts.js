@@ -86,28 +86,12 @@ tasksListElements.forEach((tasksListElement) =>
     hasTask();
   })
 );
-
-function classByColumn(activeElement) {
-  const articleClass = activeElement.parentNode.parentNode.classList[1];
-  // Выбор класса для задачи в соответствии с типом колонки
-  let statusClassTask;
-
-  switch (articleClass) {
-    case "taskboard__group--backlog":
-      statusClassTask = "task--backlog";
-      break;
-    case "taskboard__group--processing":
-      statusClassTask = "task--processing";
-      break;
-    case "taskboard__group--done":
-      statusClassTask = "task--done";
-      break;
-    case "taskboard__group--basket":
-      statusClassTask = "task--basket";
-      break;
-  }
-  // замена старого класса новым
-  return activeElement.classList.replace(activeElement.classList[2], statusClassTask);
+//Меняем класс задачи в соотвтествии с классом группы с помощью regExp
+function classByColumn(task) {
+  task.classList.value = task.classList.value.replace(
+    /\btask--.+\b/,
+    task.parentNode.parentNode.classList[1].replace(/board__group/, "")
+  );
 }
 //------------------------------------------------------------------------
 // function hasTask() - скрытие пустого элемента если в taskboard__group присутствуют более 1 элемента '.taskboard__item'.
@@ -116,10 +100,8 @@ function hasTask() {
   taskboardListCollection.forEach((taskboard) => {
     let countTask = taskboard.querySelectorAll(".task").length; //определяем количество элементов в колонке
     // скрытие или отображение пустого элемента при опустошении колонок
-    const classesEmptyTasks = taskboard.querySelector(".task--empty").classList;
-    countTask > 1
-      ? classesEmptyTasks.add("hidden-block")
-      : classesEmptyTasks.remove("hidden-block");
+    const classEmptyTasks = taskboard.querySelector(".task--empty").classList;
+    countTask > 1 ? classEmptyTasks.add("hidden-block") : classEmptyTasks.remove("hidden-block");
   });
 }
 
