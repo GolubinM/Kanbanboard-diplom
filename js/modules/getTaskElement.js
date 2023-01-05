@@ -1,6 +1,5 @@
 export default function getTaskElement(content) {
-  let insertPosition = document.querySelector(".taskboard__list");
-
+  let insertPosition = document.querySelector(".task--empty");
   let divNewTask = `<div class="taskboard__item task task--backlog">
   <div class="task__body">
     <p class="task__view">${content}</p>
@@ -8,6 +7,6 @@ export default function getTaskElement(content) {
   </div>
   <button class="task__edit" type="button" aria-label="Изменить"></button>
 </div>`;
-  insertPosition.insertAdjacentHTML("afterbegin", divNewTask);
-  return insertPosition.firstChild;
+  insertPosition.insertAdjacentHTML("beforebegin", divNewTask);
+  return insertPosition.previousSibling;
 }
