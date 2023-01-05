@@ -41,6 +41,7 @@ btnClearBasket.addEventListener("click", () => {
     deletedTask.parentNode.removeChild(deletedTask); // удаление html кода задач
   });
   hasTask(); // Отображение пустого элемента "Корзина пуста"
+  isBasketEmpty();
 });
 
 // Реализация Drag&Drop элемента задачи
