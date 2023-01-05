@@ -1,5 +1,8 @@
 import Task from "./modules/task.js";
 const btnClearBasket = document.querySelector(".button--clear");
+
+// Проверка корзины на пустоту
+isBasketEmpty();
 //------------------------------------------------------------------------
 // Создание задачи
 
@@ -11,20 +14,18 @@ inputForm.addEventListener("submit", (event) => {
   const taskContent = new Task(formData.get("task-name"));
   taskContent.init();
   inputForm.reset();
+  // Проверка есть ли в колонках задачи. Скрытие пустых элементов если есть.
   hasTask();
 });
 
-//Обработка перехода на поле Input из редактируемых элементов task
+//Обработка перехода на поле Input из редактируемых элементов task. Сохранение input.value.
 inputForm.addEventListener("click", () => {
-  document.querySelectorAll(".task--active").forEach(function (item) {
-    item.querySelector(".task__view").textContent = item.querySelector(".task__input").value;
-    item.classList.remove("task--active");
+  document.querySelectorAll(".task--active").forEach(function (task) {
+    saveDeactivate(task);
   });
 });
 
-//------------------------------------------------------------------------
-//Удаление задачи из корзины
-
+//Обработка удаления задачи из корзины
 btnClearBasket.addEventListener("click", () => {
   const deletedTasks = document.querySelectorAll(".task--basket"); // отбор удаляемых задач
   deletedTasks.forEach((deletedTask) => {
@@ -33,6 +34,7 @@ btnClearBasket.addEventListener("click", () => {
   hasTask(); // Отображение пустого элемента "Корзина пуста"
 });
 
+// Реализация Drag&Drop элемента задачи
 //------------------------------------------------------------------------
 const tasksListElements = document.querySelectorAll(".taskboard__list");
 const taskElements = document.querySelectorAll(".taskboard__item");
@@ -82,9 +84,74 @@ tasksListElements.forEach((tasksListElement) =>
       // Вставляем activeElement перед nextElement
       tasksListElement.insertBefore(activeElement, nextElement);
     }
+    // Проверка есть ли в колонках задачи. Скрытие пустых элементов если есть.
     hasTask();
   })
 );
+
+
+// Обработка вызова редактирования задачи
+document.querySelector(".taskboard").addEventListener("click", (event) => {
+  const element = event.target;
+  const classElemnet = element.getAttribute("aria-label");
+  if (classElemnet === "Изменить") editTasks(element);
+  // if (!element) return;
+});
+
+//Обработка нажатия Enter или Esc для завершения редактирования задачи
+document.querySelector(".taskboard").addEventListener("keyup", (event) => {
+  const element = event.target;
+  const classElemnet = element.getAttribute("class");
+  if (classElemnet === "task__input" && event.keyCode === 13) {
+    saveDeactivate(element.parentNode.parentNode);
+  }
+  if (classElemnet === "task__input" && event.keyCode === 27) {
+    unSaveDeactivate(element.parentNode.parentNode);
+  }
+});
+//------------------------------------------------------------------------
+function editTasks(btnElement) {
+  const task = btnElement.parentNode;
+  //выход из редактирования для всех остальных элементов
+  changeActive(task);
+  //переход к концу строки поля input редактируемой задачи
+  const inputTask = task.querySelector(".task__input");
+  inputTask.focus();
+  inputTask.selectionStart = inputTask.value.length;
+}
+//------------------------------------------------------------------------
+function changeActive(task) {
+  // отключает режим редактирования для всех задач, переключает режим для текущей задачи
+  // обновляет содержание задачи из поля input для редактируемых задач
+  const isActive = task.classList.contains("task--active");
+  document.querySelectorAll(".task--active").forEach(function (item) {
+    item.querySelector(".task__view").textContent = item.querySelector(".task__input").value;
+    item.classList.remove("task--active");
+  });
+  task.classList.toggle("task--active", !isActive);
+}
+//------------------------------------------------------------------------
+// сохранить текст задачи из input в <p> и сделать задачу не активной
+function saveDeactivate(task) {
+  task.querySelector("p").textContent = task.querySelector("input").value;
+  task.classList.remove("task--active");
+}
+//------------------------------------------------------------------------
+// восстановить значение input из <p> и сделать задачу не активной
+function unSaveDeactivate(task) {
+  task.querySelector("input").value = task.querySelector("p").textContent;
+  task.classList.remove("task--active");
+}
+
+//------------------------------------------------------------------------
+// Проверка корзины на пустоту
+function isBasketEmpty() {
+  const isEmpty = !Boolean(document.querySelector(".taskboard__list--trash").children.length - 1);
+  btnClearBasket.disabled = isEmpty;
+  return isEmpty;
+}
+
+//------------------------------------------------------------------------
 //Меняем класс задачи в соотвтествии с классом группы с помощью regExp
 function classByColumn(task) {
   task.classList.value = task.classList.value.replace(
@@ -93,22 +160,15 @@ function classByColumn(task) {
   );
 }
 //------------------------------------------------------------------------
-// function hasTask() - скрытие пустого элемента если в taskboard__group присутствуют более 1 элемента '.taskboard__item'.
+//Cкрытие пустого элемента если в taskboard__group присутствуют более 1 элемента '.taskboard__item'.
 function hasTask() {
-  const taskboardListCollection = document.querySelectorAll(".taskboard__list"); // создаем коллекцию колонок задач
+  // создаем коллекцию колонок задач
+  const taskboardListCollection = document.querySelectorAll(".taskboard__list");
   taskboardListCollection.forEach((taskboard) => {
-    let countTask = taskboard.querySelectorAll(".task").length; //определяем количество элементов в колонке
+    //определяем количество элементов в колонке
+    let countTask = taskboard.querySelectorAll(".task").length;
     // скрытие или отображение пустого элемента при опустошении колонок
     const classEmptyTasks = taskboard.querySelector(".task--empty").classList;
     countTask > 1 ? classEmptyTasks.add("hidden-block") : classEmptyTasks.remove("hidden-block");
   });
 }
-
-//------------------------------------------------------------------------
-// Проверка корзину на пустоту
-function isBasketEmpty() {
-  const isEmpty = !Boolean(document.querySelector(".taskboard__list--trash").children.length - 1);
-  btnClearBasket.disabled = isEmpty;
-  return isEmpty;
-}
-isBasketEmpty();
