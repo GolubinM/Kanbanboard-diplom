@@ -24,7 +24,7 @@ function changeActive(task) {
   // обновляет содержание задачи из поля input для редактируемых задач
   const isActive = task.classList.contains("task--active");
   document.querySelectorAll(".task--active").forEach(function (item) {
-    item.querySelector(".task__view").textContent = item.querySelector(".task__input").value;
+    item.querySelector(".task__view").textContent = item.querySelector(".task__input").value.trim();
     item.classList.remove("task--active");
   });
   task.classList.toggle("task--active", !isActive);
@@ -32,7 +32,7 @@ function changeActive(task) {
 //------------------------------------------------------------------------
 // сохранить текст задачи из input в <p> и сделать задачу не активной
 function saveDeactivate(task) {
-  task.querySelector("p").textContent = task.querySelector("input").value;
+  task.querySelector("p").textContent = task.querySelector("input").value.trim();
   task.classList.remove("task--active");
 }
 //------------------------------------------------------------------------

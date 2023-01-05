@@ -20,7 +20,7 @@ let inputForm = document.querySelector(".add-task__form");
 inputForm.addEventListener("submit", (event) => {
   event.preventDefault();
   let formData = new FormData(inputForm);
-  const taskContent = new Task(formData.get("task-name"));
+  const taskContent = new Task(formData.get("task-name").trim());
   taskContent.init();
   inputForm.reset();
   // Проверка есть ли в колонках задачи. Скрытие пустых элементов если есть.
