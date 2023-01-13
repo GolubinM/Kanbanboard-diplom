@@ -8,7 +8,7 @@ import {
   classByColumn,
   hasTask,
   btnClearBasket,
-} from './modules/functions.js';
+} from "./modules/functions.js";
 
 // Проверка корзины на пустоту
 isBasketEmpty();
@@ -67,10 +67,10 @@ document.addEventListener(`dragend`, (evt) => {
   classByColumn(activeElement);
   isBasketEmpty();
 });
-
+//----Обработка вставки задачи--------------------------------------------------------------
 tasksListElements.forEach((tasksListElement) =>
   tasksListElement.addEventListener(`dragover`, (evt) => {
-    if (evt.target.classList.contains("task")) {
+    if (evt.target.querySelectorAll(".task--backlog:after")) {
       // Разрешаем сбрасывать элементы в эту область
       evt.preventDefault();
       // Находим перемещаемый элемент
@@ -87,10 +87,17 @@ tasksListElements.forEach((tasksListElement) =>
         return;
       }
       // Находим элемент, перед которым будем вставлять
-      const nextElement =
-        currentElement === activeElement.nextElementSibling
-          ? currentElement.nextElementSibling
-          : currentElement;
+      // evt.clientY — вертикальная координата курсора в момент, когда сработало событие
+      const nextElement = getNextElement(evt.clientY, currentElement);
+
+      // Проверяем, нужно ли менять элементы местами
+      if (
+        (nextElement && activeElement === nextElement.previousElementSibling) ||
+        activeElement === nextElement
+      ) {
+        // Если нет, выходим из функции, чтобы избежать лишних изменений в DOM
+        return;
+      }
       // Вставляем activeElement перед nextElement
       tasksListElement.insertBefore(activeElement, nextElement);
     }
@@ -99,7 +106,20 @@ tasksListElements.forEach((tasksListElement) =>
   })
 );
 
-// Обработка вызова редактирования задачи
+//------Поиск элемента перед которым вставлять задачу-----------------------------------------
+const getNextElement = (cursorPosition, currentElement) => {
+  // Получаем объект с размерами и координатами
+  const currentElementCoord = currentElement.getBoundingClientRect();
+  // Находим вертикальную координату центра текущего элемента
+  const currentElementCenter = currentElementCoord.y + currentElementCoord.height / 2;
+  // Если курсор выше центра элемента, возвращаем текущий элемент
+  // В ином случае — следующий DOM-элемент
+  const nextElement =
+    cursorPosition < currentElementCenter ? currentElement : currentElement.nextElementSibling;
+  return nextElement;
+};
+
+// Обработка вызова редактирования задачи---------------------------------------------------
 document.querySelector(".taskboard").addEventListener("click", (event) => {
   const element = event.target;
   const classElemnet = element.getAttribute("aria-label");
@@ -107,7 +127,7 @@ document.querySelector(".taskboard").addEventListener("click", (event) => {
   // if (!element) return;
 });
 
-//Обработка нажатия Enter или Esc для завершения редактирования задачи
+//Обработка нажатия Enter или Esc для завершения редактирования задачи----------------------
 document.querySelector(".taskboard").addEventListener("keyup", (event) => {
   const element = event.target;
   const classElemnet = element.getAttribute("class");
