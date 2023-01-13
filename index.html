@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kanban board">
   <link rel="stylesheet" href="css/style.css">
+  <link rel='icon' href='data:;base64,='>
   <title>Kanbanboard</title>
 </head>
 
@@ -20,8 +22,8 @@
         <h2 class="visually-hidden">Добавить задачу</h2>
         <form class="add-task__form" aria-label="Форма добавления задачи">
           <div class="add-task__input-wrapper">
-          <label for="add-task">Новая задача</label>
-            <input type="text" name="task-name" id="add-task" placeholder="Название задачи..." required>
+            <label for="add-task">Новая задача</label>
+            <input type="text" name="task-name" id="add-task" placeholder="Название задачи..." required autocomplete="off">
           </div>
           <button class="add-task__button button" type="submit">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,40 +40,8 @@
         <article class="taskboard__group taskboard__group--backlog">
           <h3 class="taskboard__group-heading taskboard__group-heading--backlog">Бэклог</h3>
           <div class="taskboard__list">
-            <div class="taskboard__item task task--active">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
+            <div class="taskboard__item task task--empty">
+              <p>Перетащите карточку</p>
             </div>
           </div>
         </article>
@@ -81,34 +51,6 @@
             <div class="taskboard__item task task--empty">
               <p>Перетащите карточку</p>
             </div>
-            <div class="taskboard__item task task--processing task--active">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task task--processing">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task task--processing">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-          </div>
-          <div class="taskboard__item task task--processing">
-            <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-            <button class="task__edit" type="button" aria-label="Изменить"></button>
           </div>
         </article>
         <article class="taskboard__group taskboard__group--done">
@@ -117,40 +59,11 @@
             <div class="taskboard__item task task--empty">
               <p>Перетащите карточку</p>
             </div>
-            <div class="taskboard__item task task--done task--active">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task task--processing">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
           </div>
         </article>
         <article class="taskboard__group taskboard__group--basket">
           <h3 class="taskboard__group-heading taskboard__group-heading--basket">Корзина</h3>
           <div class="taskboard__list taskboard__list--trash">
-            <div class="taskboard__item task task--basket task--active">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-            </div>
-            <div class="taskboard__item task task--basket">
-              <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
-              <button class="task__edit" type="button" aria-label="Изменить"></button>
-
-            </div>
             <div class="task--empty task task--empty-trash">
               <p>Корзина пуста</p>
             </div>
@@ -170,4 +83,5 @@
   </main>
   <script src="js/scripts.js" type="module"></script>
 </body>
+
 </html>

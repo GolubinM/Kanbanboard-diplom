@@ -75,7 +75,6 @@
 }
 
 .task--dragged {
-  /*filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.1));*/
   padding: 16px 14px;
   color: var(--inactive-color);
   border: 1px dashed var(--inactive-color);
