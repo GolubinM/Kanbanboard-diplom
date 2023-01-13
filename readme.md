@@ -1,2 +1,2 @@
-В **indexWithTasks.html содержаться уже созданные задачи.
+В **indexWithTasks.html содержатся уже созданные задачи.
 В **index.html задач нет.
